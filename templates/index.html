@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ name }}</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            font-size: 1em;
+            margin: 20px;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        h1, h2 {
+            color: #333;
+        }
+
+        li {
+            margin-bottom: 10px;
+        }
+        form {
+            margin: 0px;
+            padding: 0px;
+        }
+        label {
+            font-weight: bold;
+        }
+        select, button {
+            margin: 0px;
+            padding: 5px;
+            font-size: 0.9em;
+        }
+        a {
+            text-decoration: none;
+            color: #007BFF;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <ul>
+        <li>Dirac
+            <ul>
+                <li>
+
+                    <form action="{{ url_for('set_slot') }}" method="post">
+                        <label for="slot_index">Current Slot:</label>
+                        <select name="slot_index" id="slot_index">
+                            {% for slot in slots %}
+                                <option value="{{ slot['index'] }}" {% if slot['index'] == active_slot %}selected{% endif %}>{{ slot['name'] }}</option>
+                            {% endfor %}
+                        </select>
+                        <button type="submit">Set</button>
+                    </form>
+
+                </li>
+                <li>
+                    <form action="{{ url_for('set_filter_state') }}" method="post">
+                        <label for="filter_state">Filter State:</label>
+                        <select name="filter_state" id="filter_state">
+                            <option value="true" {% if filter_state %}selected{% endif %}>Enabled</option>
+                            <option value="false" {% if not filter_state %}selected{% endif %}>Disabled</option>
+                        </select>
+                        <button type="submit">Set</button>
+                    </form>
+                </li>
+                <li>
+                    <form action="{{ url_for('reset_gain') }}" method="post">
+                        <label for="reset_gain">Speaker Gain: {{ speaker_gain }}</label>
+                        <button name="reset_gain" type="submit">Reset</button>
+                    </form>
+
+                </li>
+            </ul>
+        </li>
+        {% if camilla_url %}
+        <li><a href="{{ camilla_url }}" target=_camilladsp>CamillaDSP</a></li>
+        {% endif %}
+        {% if uvmeter_url %}
+        <li><a href="{{ uvmeter_url }}" target=_uvmeter>UV Meter</a> </li>  
+        {% endif %}
+    </ul>
+</body>
+</html>
